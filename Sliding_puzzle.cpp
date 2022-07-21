@@ -35,7 +35,6 @@ struct cmp {
 
 pn solve(pn); //문제 푸는 함수
 pn find_value(pn); //value값을 찾는 함수
-pn find_value2(pn, char); //value값을 조금 더 빠르게 찾기 위해 변형한 함수
 void print_puzzle(pn); //puzzle 출력함수
 pn add_node(pn, char); //우선순위 큐에 다음 노드를 넣기 위한 함수
 bool solvable(pn); //solvable여부 확인 함수
@@ -132,46 +131,6 @@ pn find_value(pn node) {
     return node;
 }
 
-pn find_value2(pn node, char from) {
-    int pre_value = node.value;
-    node.value = 0;
-    int val;
-
-    switch (from) {
-    case 'L':
-        val = node.puzzle[node.empty[0]][node.empty[1]];
-        node.value = pre_value + abs((val - 1) / 5 - node.empty[0]) + abs((val - 1) % 5 - node.empty[1]);
-        node.empty[1]++;
-        node.value -= abs((val - 1) / 5 - node.empty[0]) + abs((val - 1) %5 - node.empty[1]);
-        node.value--;
-        break;
-    case 'R':
-        val = node.puzzle[node.empty[0]][node.empty[1]];
-        node.value = pre_value + abs((val - 1) /5- node.empty[0]) + abs((val - 1) % 5 - node.empty[1]);
-        node.empty[1]--;
-        node.value -= abs((val - 1) / 5- node.empty[0]) + abs((val - 1) % 5 - node.empty[1]);
-        node.value++;
-        break;
-    case 'U':
-        val = node.puzzle[node.empty[0]][node.empty[1]];
-        node.value = pre_value + abs((val - 1) /5 - node.empty[0]) + abs((val - 1) %5 - node.empty[1]);
-        node.empty[0]++;
-        node.value -= abs((val - 1) / 5- node.empty[0]) + abs((val - 1) % 5 - node.empty[1]);
-        node.value--;
-        break;
-    case 'D':
-        val = node.puzzle[node.empty[0]][node.empty[1]];
-        node.value = pre_value + abs((val - 1) / 5 - node.empty[0]) + abs((val - 1) % 5 - node.empty[1]);
-        node.empty[0]--;
-        node.value -= abs((val - 1) / 5 - node.empty[0]) + abs((val - 1) % 5 - node.empty[1]);
-        node.value++;
-        break;
-    } // swap에서 변경된 두 부분의 맨하탄 거리만 다시 구함
-
-    node.cmpnum = node.value + node.num;
-    return node;
-}
-
 void print_puzzle(pn node) {
     int num = node.order.size();
 
@@ -202,7 +161,7 @@ pn add_node(pn node, char to) {
         swap(node.puzzle[node.empty[0]][node.empty[1]], node.puzzle[node.empty[0]][node.empty[1] + 1]);
         break;
     }
-    node = find_value2(node, node.from);
+    node = find_value(node);
     return node;
 }
 
