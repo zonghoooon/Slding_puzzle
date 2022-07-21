@@ -7,9 +7,6 @@
 #include <random>
 #include <chrono>
 
-unsigned int C;
-unsigned int D;
-
 using namespace std;
 
 int puzzle[5][5] = {
@@ -73,28 +70,14 @@ pn solve(pn tnode) {
         printf("-1\n");
         return node;
     }
-    int t = node.value + 100;
-    unsigned int cnt = 0;
-    int temp = 0;
-    C = t + 10;
-    D = t;
+
 
     do {
-        cnt++;
-        temp++;
 
         if (node.value == 0) {
             return node;
         }// solution 찾았으면 탈출
 
-        if (temp == 100000) {
-
-            if ((cnt >> 15) <= t) {
-                C = t + 10 + (cnt >> 16);
-                D = t - (cnt >> 16);
-                temp = 0;
-            }
-        }
 
         if (node.empty[0] != 4 && node.from != 'D') {
             node.order.push_back('D');
@@ -144,7 +127,7 @@ pn find_value(pn node) {
             }
         }
     } //맨하탄거리 이용
-    node.cmpnum = node.value * C + node.num * D;// 적게 남았으면 공격적으로 탐색
+    node.cmpnum = node.value + node.num;
 
     return node;
 }
@@ -185,7 +168,7 @@ pn find_value2(pn node, char from) {
         break;
     } // swap에서 변경된 두 부분의 맨하탄 거리만 다시 구함
 
-    node.cmpnum = node.value * C + node.num * D;// 적게 남았으면 공격적으로 탐색
+    node.cmpnum = node.value + node.num;
     return node;
 }
 
